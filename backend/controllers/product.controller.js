@@ -22,7 +22,7 @@ export const getFeaturedProducts = async (req, res) => {
     //if not in redis, fetch from mongodb
     // .lean() is gonna return a plain javascript object instead of a mongodb document
     // which is good for performance
-    featuredProducts = await Product.find({ isFeautured: true }).lean();
+    featuredProducts = await Product.find({ isFeatured: true }).lean();
 
     if(!featuredProducts) {
       return res.status(404).json({ message: "No featured products found" });
@@ -132,7 +132,7 @@ export const toggleFeaturedProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (product) {
-      product.isFeautured = !product.isFeautured;
+      product.isFeatured = !product.isFeatured;
       const updatedProduct = await product.save();
       
       // update cache
@@ -151,7 +151,7 @@ async function updateFeaturedProductsCache() {
   try {
     // The lean() method returns a plain javascript object instead of a full mongodb document.
     // This significnatly improves performance
-    const featuredProducts = await Product.find({ isFeautured: true }).lean();
+    const featuredProducts = await Product.find({ isFeatured: true }).lean();
     await redis.set("featured_products", JSON.stringify(featuredProducts));
   } catch (error) {
     console.log("Error updating featured products cache", error.message);
