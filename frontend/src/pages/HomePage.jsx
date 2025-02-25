@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import CategoryItem from "../components/CategoryItem.jsx";
 import FeaturedProducts from "../components/FeaturedProducts.jsx";
 import { useProductStore } from "../stores/useProductStore.js";
