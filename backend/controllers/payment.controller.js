@@ -132,7 +132,7 @@ async function createStripeCoupon(discountPercentage) {
 
 async function createNewCoupon(userId) {
   const newCoupon = new Coupon ({
-    code: "GIFT" + Math.randon().toString(36).substr(2, 8).toUpperCase(),
+    code: "GIFT" + Math.random().toString(36).substr(2, 8).toUpperCase(),
     discountPercentage: 10,
     expirationDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
     userId: userId
