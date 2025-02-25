@@ -56,4 +56,34 @@ export const useUserStore = create((set, get) => ({
   },
 }));
 
-// TODO: Implement the axios interceptors for refreshing access tokens (expires in 15 minutes)
+let refreshPromise = null;
+
+axios.interceptors.response.use(
+  (respone) => respone,
+  async (error) => {
+    const originalRequest = error.config;
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        // If a refresh is already in progress, wait for it to complete
+        if (refreshPromise) {
+          return axios(originalRequest);
+        }
+
+        // Start a new refresh process
+        refreshPromise = useUserStore.getState().refreshToken(); 
+        await refreshPromise;
+        refreshPromise = null;
+
+        return axios(originalRequest);
+      } catch (refreshError) {
+        // If the refresh fails, reject the original request
+        useUserStore.getState().logout();
+        return Promise.reject(refreshError);
+      }
+    }
+    
+    return Promise.reject(error);
+  }
+)
