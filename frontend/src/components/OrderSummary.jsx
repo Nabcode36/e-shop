@@ -3,7 +3,7 @@ import { useCartStore } from "../stores/useCartStore.js";
 import { Link } from "react-router-dom";
 import { MoveRight } from "lucide-react";
 import { loadStripe } from "@stripe/stripe-js";
-import axios from "axios";
+import axios from "../lib/axios.js";
 
 const stripePromise = loadStripe("pk_test_51QoFjDBbONoVtlSiIwxjlDLIAa10S0MuTSSlCE5JNXNIzcl9OLDV9l10NDGiOQHBZIAg5NMknGkBuj4CmYrgIRpz00uLyFHqZc");
 
@@ -18,7 +18,7 @@ const OrderSummary = () => {
 
 	const handlePayment = async () => {
 		const stripe = await stripePromise;
-		const res = await axios.post("/api/payments/create-checkout-session", {
+		const res = await axios.post("payments/create-checkout-session", {
 			products: cart,
 			couponCode: coupon ? coupon.code : null,
 		});
