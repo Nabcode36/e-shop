@@ -91,6 +91,7 @@ export const checkoutSuccess = async (req, res) => {
             isActive: false
           }
         )
+      }
         // create a new order
         const products = JSON.parse(session.metadata.products);
         const newOrder = new Order({
@@ -112,12 +113,11 @@ export const checkoutSuccess = async (req, res) => {
           orderId: newOrder._id
         });
       }
-    }
   } catch (error) {
     console.error("Error processing successful checkout:", error);
     res.status(500).json({ message: "Error processing successful checkout:", error: error.message });
   }
-}
+};
 
 // Utility functions
 async function createStripeCoupon(discountPercentage) {
