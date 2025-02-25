@@ -131,6 +131,7 @@ async function createStripeCoupon(discountPercentage) {
 };
 
 async function createNewCoupon(userId) {
+  await Coupon.findOneAndDelete({ userId });
   const newCoupon = new Coupon ({
     code: "GIFT" + Math.random().toString(36).substr(2, 8).toUpperCase(),
     discountPercentage: 10,
